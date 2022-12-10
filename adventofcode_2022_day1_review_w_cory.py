@@ -55,24 +55,6 @@ Find the Elf carrying the most Calories. How many total Calories is that Elf car
 To begin, get your puzzle input. https://adventofcode.com/2022/day/1/input
 '''
 #imports
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import ssl
-import re
-
-# Ignore SSL certificate errors
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
-
-#get data from webpage
-url = 'https://adventofcode.com/2022/day/1/input'
-html = urlopen(url, context=ctx).read()
-soup = BeautifulSoup(html, "html.parser")
-hyperlink_tags = soup("pre")
-content = hyperlink_tags
-
-print(content)
 
 #variables
 file_name = "adventofcode_2022_day1_input.txt"
@@ -81,6 +63,42 @@ total_calories = 0
 elf_number = 1
 list_of_elfs = []
 
-'''Cory says I don't need Beautiful soup, I should use something else liek requests, since I don't need xml or jason reading
-because it doesn't use xml or json and straight text we can just use requestss: input = requests.get(url).txt
-'''
+#read file, and sum integers until break is encountered...
+#...and enter that sum in a tupled list: example elf_1, 50000
+#...order the list and find the elf with the most calories
+for line in file_handle:
+    line = line.rstrip()
+    #detect a line beak and assign current sum to elf
+    if line == '':
+        elf_name = (f'{"elf_"}{elf_number}{ " total calories: "}')
+        list_of_elfs.append((elf_name, total_calories))
+        #print(list_of_elfs)
+        elf_number +=1
+        total_calories = 0
+    #if no line break is detected continue summing calories for elf
+    else:
+        number = int(line)
+        total_calories = total_calories + number
+
+#sort the list
+list_of_elfs = sorted(list_of_elfs, key=lambda x: x[1])
+
+#uncomment below for list of elfs
+#for elf in list_of_elfs:
+    #print(elf)
+print(list_of_elfs[-1])
+
+#Notes: 
+#dispose of file handle at end. use with open("input-1, txt", "r") as file so it will automatically close once open. 
+# ...then: line = file.readline()
+#but needs fixing, forgot last elf!
+#if current_elf_calories != 0:
+#   elves.append(current_elf_calories)
+#   current_elf_calories = 0
+#print(max(elves)) instead of sorting and grabbing end. but doesn't work with list of tuples needs to just be a list of integers
+#YAGNI : you aint gonna need it. don't need elf number
+
+
+
+        
+
